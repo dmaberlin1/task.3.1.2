@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Update employee</title>
+</head>
+<body>
+<style>table {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  font-size: 14px;
+  background: white;
+  max-width: 70%;
+  width: 70%;
+  border-collapse: collapse;
+  text-align: left;
+}
+th {
+  font-weight: normal;
+  color: #039;
+  border-bottom: 2px solid #6678b1;
+  padding: 10px 8px;
+}
+td {
+  color: #669;
+  padding: 9px 8px;
+  transition: .3s linear;
+}
+tr:hover td {
+  color: #6699ff;
+}</style>
+<form action="#" th:action="@{/admin/user-update}" th:object="${user}" method="post">
+  <label for="id">ID</label>
+  <input readonly type="number" th:field="*{id}" id="id" placeholder="ID">
+  <br/>
+  <label for="username">User name</label>
+  <input type="text" th:field="*{username}" id="username" placeholder="username">
+  <br/>
+  <label for="username">surname</label>
+  <input type="text" th:field="*{surname}" id="surname" placeholder="surname">
+  <br/>
+  <label for="username">age</label>
+  <input type="text" th:field="*{age}" id="age" placeholder="age">
+  <br/>
+  <label for="password">Password</label>
+  <input type="password" th:field="*{password}" id="password" placeholder="password">
+  <br/>
+  <select name="nameRoles" multiple size="2">
+    <option th:each="role : ${roles}"
+            th:value="${role.name}"
+            th:text="${role.getName()}">
+    </option>
+  </select>
+  <br>
+  <input type="submit" value="Update user">
+</form>
+</body>
+</html>

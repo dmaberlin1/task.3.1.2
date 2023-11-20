@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8"/>
+  <title>All users</title>
+</head>
+<body>
+<style>table {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  font-size: 14px;
+  background: white;
+  max-width: 70%;
+  width: 70%;
+  border-collapse: collapse;
+  text-align: left;
+}
+th {
+  font-weight: normal;
+  color: #039;
+  border-bottom: 2px solid #6678b1;
+  padding: 10px 8px;
+}
+td {
+  color: #669;
+  padding: 9px 8px;
+  transition: .3s linear;
+}
+tr:hover td {
+  color: #6699ff;
+}</style>
+<h2 align="center"> Admin panel</h2>
+<table align="center" class="table_blur" >
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>User name</th>
+    <th>Surname</th>
+    <th>age</th>
+    <th>Role</th>
+    <th>Operations</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="user : ${allUser}">
+    <td th:text="${user.id}"></td>
+    <td th:text="${user.username}"></td>
+    <td th:text="${user.surname}"></td>
+    <td th:text="${user.age}"></td>
+    <td>
+        <span th:each="role : ${user.getRoles()}">
+            <span th:text="${role.getName()}"></span>
+        </span>
+    </td>
+    <td><a th:href="@{admin/user-update/{id}(id=${user.id})}">
+      <input type="submit" value="Update"/></a>
+
+      <form th:method="DELETE" th:action="@{admin/user-delete/{id}(id=${user.getId()})}">
+        <input type="submit" value="Delete"/>
+      </form>
+    </td>
+  </tr>
+  </tbody>
+
+</table>
+</div>
+<a th:href="@{admin/user-save}">
+  <input type="submit" value="Create user"/>
+</a>
+<br>
+<a th:href="@{/login}">
+  <input type="submit" value="Exit"/>
+</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html lang="ru" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>All users</title>
+</head>
+<body>
+<style>table {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 14px;
+    background: white;
+    max-width: 70%;
+    width: 70%;
+    border-collapse: collapse;
+    text-align: left;
+}
+th {
+    font-weight: normal;
+    color: #039;
+    border-bottom: 2px solid #6678b1;
+    padding: 10px 8px;
+}
+td {
+    color: #669;
+    padding: 9px 8px;
+    transition: .3s linear;
+}
+tr:hover td {
+    color: #6699ff;
+}</style>
+<table>
+    <thead>
+    <tr>
+        <th>User name</th>
+        <th>surname</th>
+        <th>age</th>
+        <th>Role</th>
+        <th>Operations</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${oneUser}">
+        <td th:text="${user.username}"></td>
+        <td th:text="${user.surname}"></td>
+        <td th:text="${user.age}"></td>
+        <td>
+
+        <span th:each="role : ${user.getRoles()}">
+            <span th:text="${role.getName()}"></span>
+        </span>
+        </td>
+        <td><a th:href="@{user/user-update/{id}(id=${user.id})}">
+            <input type="submit" value="Update"/></a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<a th:href="@{/login}">
+    <input type="submit" value="Exit"/>
+</a>
+</body>
+</html>

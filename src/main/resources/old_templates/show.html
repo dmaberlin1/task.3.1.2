@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>User</title>
+</head>
+
+<style>table {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  font-size: 14px;
+  background: white;
+  max-width: 70%;
+  width: 70%;
+  border-collapse: collapse;
+  text-align: left;
+}
+th {
+  font-weight: normal;
+  color: #039;
+  border-bottom: 2px solid #6678b1;
+  padding: 10px 8px;
+}
+td {
+  color: #669;
+  padding: 9px 8px;
+  transition: .3s linear;
+}
+tr:hover td {
+  color: #6699ff;
+}</style>
+
+<body>
+<table  class="table_blur">
+  <tr>
+    <th colspan="6" text-align="center">VIEW USER</th>
+  </tr>
+  <tr>
+    <th>Name</th>
+    <th>Last name</th>
+    <th>Gender</th>
+    <th>Email</th>
+  </tr>
+  <tr>
+    <td><p th:text="${user.getFirstName()}">VALUE</p></td>
+    <td><p th:text="${user.getLastName()}">VALUE</p></td>
+    <td><p th:text="${user.getGenderDisplayName()}">VALUE</p></td>
+    <td><p th:text="${user.getEmail()}">VALUE</p></td>
+    <td><a th:href="@{/users/{id}/edit(id=${user.getId()})}">Edit</a></td>
+  </tr>
+  <tr>
+    <td><form th:method="delete" th:action="@{/users/{id}(id=${user.getId()})}">
+      <input type="submit" value="remove"/>
+    </form></td>
+  </tr>
+</table>
+</body>
+</html>
