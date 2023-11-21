@@ -49,11 +49,16 @@ tr:hover td {
     <td th:text="${user.lastName}"></td>
     <td th:text="${user.getGenderDisplayName}"></td>
     <td th:text="${user.getEmail}"></td>
-    <td th:text="${user.getRole}"></td>
+<!--    <td th:text="${user.getRole}"></td>-->
     <td>
-        <span th:each="role : ${user.getRole()}">
-            <span th:text="${role.getName()}"></span>
-        </span>
+    <span th:each="role : ${user.getRole()}">
+        <span th:text="${#strings.substring(role.getName(), 5)}"></span>
+    </span>
+    </td>
+    <td>
+    <span th:each="role : ${user.getRole()}">
+        <span th:text="${role.getName()}"></span>
+    </span>
     </td>
     <td><a th:href="@{admin/user-update/{id}(id=${user.id})}">
       <input type="submit" value="Update"/></a>
@@ -66,7 +71,6 @@ tr:hover td {
   </tbody>
 
 </table>
-</div>
 <a th:href="@{admin/user-save}">
   <input type="submit" value="Create user"/>
 </a>
@@ -74,6 +78,5 @@ tr:hover td {
 <a th:href="@{/login}">
   <input type="submit" value="Exit"/>
 </a>
-</div>
 </body>
 </html>

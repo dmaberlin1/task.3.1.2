@@ -7,7 +7,7 @@
 </head>
 <body>
 <style>table {
-    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif,serif;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif, serif;
     font-size: 14px;
     background: white;
     max-width: 70%;
@@ -15,17 +15,20 @@
     border-collapse: collapse;
     text-align: left;
 }
+
 th {
     font-weight: normal;
     color: #039;
     border-bottom: 2px solid #6678b1;
     padding: 10px 8px;
 }
+
 td {
     color: #669;
     padding: 9px 8px;
     transition: .3s linear;
 }
+
 tr:hover td {
     color: #6699ff;
 }</style>
@@ -46,12 +49,16 @@ tr:hover td {
         <td th:text="${user.lastName}"></td>
         <td th:text="${user.getGenderDisplayName}"></td>
         <td th:text="${user.getEmail}"></td>
-        <td th:text="${user.getRole}"></td>
+<!--        <td th:text="${user.getRole}"></td>-->
         <td>
-
-        <span th:each="role : ${user.getRole()}">
-            <span th:text="${role.getName()}"></span>
-        </span>
+    <span th:each="role : ${user.getRole()}">
+        <span th:text="${#strings.substring(role.getName(), 5)}"></span>
+    </span>
+        </td>
+        <td>
+    <span th:each="role : ${user.getRole()}">
+        <span th:text="${role.getName()}"></span>
+    </span>
         </td>
         <td><a th:href="@{user/user-update/{id}(id=${user.id})}">
             <input type="submit" value="Update"/></a>

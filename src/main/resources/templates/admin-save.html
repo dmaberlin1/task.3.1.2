@@ -30,7 +30,7 @@ tr:hover td {
 }</style>
 <form th:method="POST" th:action="@{/admin/user-save}" th:object="${user}">
   <label for="firstName">First Name: </label>
-  <input type="text" th:field="*{username}" id="firstName">
+  <input type="text" th:field="*{firstName}" id="firstName">
   <br>
   <label for="lastName">Last Name: </label>
   <input type="text" th:field="*{lastName}" id="lastName">
@@ -47,7 +47,7 @@ tr:hover td {
   <label for="password">Password: </label>
   <input type="password" th:field="*{password}" required minlength="6" id="password">
   <br>
-  <select name="nameRoles" multiple size="2">
+  <select name="nameRole" multiple size="2">
     <option th:each="role : ${roles}"
             th:value="${role.name}"
             th:text="${role.getName()}">

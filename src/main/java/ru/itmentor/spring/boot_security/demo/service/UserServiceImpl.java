@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDetails user = userRepository.findByUsername(username);
+        UserDetails user = userRepository.findByFirstName(username);
         if (user == null) {
             throw new UsernameNotFoundException("User with this " + username + " User Name not found");
         }
@@ -58,11 +58,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public boolean saveUser(User user) {
-        User byUsername = userRepository.findByUsername(user.getUsername());
+        User byUsername = userRepository.findByFirstName(user.getUsername());
         if (byUsername != null) {
             return false;
         }
-        if (user.getUsername().equals("") | user.getPassword().equals("")) {
+        if (user.getUsername().isEmpty() | user.getPassword().isEmpty()) {
             return false;
         }
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
@@ -75,11 +75,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         или изменить логику только для тестового окружения, не затрагивая основной код, который используется в продакшн.
             */
     public boolean saveUserTest(User user) {
-        User byUsername = userRepository.findByUsername(user.getUsername());
+        User byUsername = userRepository.findByFirstName(user.getUsername());
         if (byUsername != null) {
             return false;
         }
-        if (user.getUsername().equals("") | user.getPassword().equals("")) {
+        if (user.getUsername().isEmpty() | user.getPassword().isEmpty()) {
             return false;
         }
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public Long getUsernameByName(String name) {
-        User user = userRepository.findByUsername(name);
+        User user = userRepository.findByFirstName(name);
         return user.getId();
     }
 
@@ -121,8 +121,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         user.setRole(
                 // Преобразование имен ролей в массив строк
                 roleService.getRoleByName(role.stream()
-                .map(role1 -> role1.getName())
-                .toArray(String[]::new)));
+                        .map(Role::getName)
+                        .toArray(String[]::new)));
         // Шаг 5: Возврат обновленного объекта пользователя
         return user;
     }
@@ -153,9 +153,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public void addTestUsers() {
         roleRepository.save(new Role("ROLE_ADMIN", 1L));
         roleRepository.save(new Role("ROLE_USER", 2L));
-        User newAdmin = new User("admin", "test", "admin@gmail.com", "admin111", Gender.PREFER_NOT_TO_SAY);
+        User newAdmin = new User(
+                "admin", "test", "admin@gmail.com", "admin111",
+                Gender.PREFER_NOT_TO_SAY, roleService.getRoleByName(new String[]{"ROLE_ADMIN"}));
         saveUserTest(newAdmin);
-        User newUser = new User("user", "userLastName", "user@gmail.com", "user111", Gender.MALE);
+        User newUser = new User("user",
+                "userLastName", "user@gmail.com", "user111",
+                Gender.MALE, roleService.getRoleByName(new String[]{"ROLE_USER"}));
         saveUser(newUser);
     }
 }
