@@ -29,17 +29,23 @@ tr:hover td {
   color: #6699ff;
 }</style>
 <form th:method="POST" th:action="@{/admin/user-save}" th:object="${user}">
-  <label for="email">User name: </label>
-  <input type="text" th:field="*{username}" id="email">
+  <label for="firstName">First Name: </label>
+  <input type="text" th:field="*{username}" id="firstName">
   <br>
-  <label for="email">surname: </label>
-  <input type="text" th:field="*{surname}" id="surname">
+  <label for="lastName">Last Name: </label>
+  <input type="text" th:field="*{lastName}" id="lastName">
   <br>
-  <label for="email">age: </label>
-  <input type="text" th:field="*{age}" id="age">
+  <label for="gender">Gender: </label>
+  <select th:field="*{gender}" id="gender">
+    <option th:each="gender : ${T(ru.itmentor.spring.boot_security.demo.model.Gender).values()}"
+            th:value="${gender}" th:text="${gender.getDisplayName()}"></option>
+  </select>
+  <br>
+  <label for="email">email:</label>
+  <input type="text" th:field="*{email}" id="email">
   <br>
   <label for="password">Password: </label>
-  <input type="text" th:field="*{password}" id="password">
+  <input type="password" th:field="*{password}" required minlength="6" id="password">
   <br>
   <select name="nameRoles" multiple size="2">
     <option th:each="role : ${roles}"
@@ -48,6 +54,7 @@ tr:hover td {
     </option>
   </select>
   <br>
+
   <input type="submit" value="Create user">
 
 </form>

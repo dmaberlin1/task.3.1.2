@@ -32,24 +32,31 @@ tr:hover td {
   <label for="id">ID</label>
   <input readonly type="number" th:field="*{id}" id="id" placeholder="ID">
   <br/>
-  <label for="username">User name</label>
-  <input type="text" th:field="*{username}" id="username" placeholder="username">
-  <br/>
-  <label for="username">surname</label>
-  <input type="text" th:field="*{surname}" id="surname" placeholder="surname">
-  <br/>
-  <label for="username">age</label>
-  <input type="text" th:field="*{age}" id="age" placeholder="age">
-  <br/>
-  <label for="password">Password</label>
-  <input type="password" th:field="*{password}" id="password" placeholder="password">
-  <br/>
+  <label for="firstName">First Name: </label>
+  <input type="text" th:field="*{username}" id="firstName">
+  <br>
+  <label for="lastName">Last Name: </label>
+  <input type="text" th:field="*{lastName}" id="lastName">
+  <br>
+  <label for="gender">Gender: </label>
+  <select th:field="*{gender}" id="gender">
+    <option th:each="gender : ${T(ru.itmentor.spring.boot_security.demo.model.Gender).values()}"
+            th:value="${gender}" th:text="${gender.getDisplayName()}"></option>
+  </select>
+  <br>
+  <label for="email">email:</label>
+  <input type="text" th:field="*{email}" id="email">
+  <br>
+  <label for="password">Password: </label>
+  <input type="password" th:field="*{password}" required minlength="6" id="password">
+  <br>
   <select name="nameRoles" multiple size="2">
     <option th:each="role : ${roles}"
             th:value="${role.name}"
             th:text="${role.getName()}">
     </option>
   </select>
+  <br>
   <br>
   <input type="submit" value="Update user">
 </form>

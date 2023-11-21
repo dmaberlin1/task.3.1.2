@@ -3,6 +3,7 @@ package ru.itmentor.spring.boot_security.demo.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,66 +11,64 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.service.UserService;
+import ru.itmentor.spring.boot_security.demo.service.UserServiceImpl;
 
+import java.security.Principal;
+
+
+/**Principal - это интерфейс в Java, представляющий текущего аутентифицированного пользователя в системе.
+ *  Он предоставляет метод getName(), который возвращает имя текущего пользователя.
+ *  В контексте веб-приложений с использованием Spring Security, объект Principal содержит информацию
+ *  о текущем аутентифицированном пользователе.
+
+ В контексте кода, Principal principal в методах контроллера используется для получения информации о текущем
+ аутентифицированном пользователе. Например, в методе showUser он используется для получения информации о пользователе,
+ чтобы отобразить его данные.
+*/
 
 @Controller
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
-
-
+    private final UserServiceImpl userService;
 
     @GetMapping("/user")
-    public String showAllUsers(Model model, @ModelAttribute("flashMessage") String flashAttribute){
-        model.addAttribute("users",userService.getAllUsers());
-        return "index";
-    }
-
-    @GetMapping("/{id}")
-    public String getUserById(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", userService.getUserById(id));
-        return "show";
-    }
-
-    @GetMapping(value = "/new")
-    public String addUserForm(@ModelAttribute("user")User user){
-        return "new";
+    public String showUser(Principal principal,Model model){
+        User user = (User) userService.loadUserByUsername(principal.getName());
+        model.addAttribute("oneUser",user);
+        return "/user";
     }
 
 
-
-    @GetMapping("/{id}/edit")
-    public String editUserForm(@PathVariable(value = "id",required = true) int id, Model model, RedirectAttributes attributes){
-        User user = userService.getUserById(id);
-        if(user==null){
-            attributes.addFlashAttribute("flashMessage","User are not exists!");
-            return "redirect:/users";
-        }
-        model.addAttribute("user",userService.getUserById(id));
-        return "edit";
+    /**
+     * Отображает форму обновления пользователя.
+     *
+     * @param id    Идентификатор пользователя, которого нужно обновить.
+     * @param model Модель для передачи данных в представление.
+     * @return Путь к представлению с формой обновления пользователя.
+     */
+    @GetMapping("/user/user-update/{id}")
+    public String updateUserForm(@PathVariable("id") Long id,Model model){
+        model.addAttribute("user",userService.findUserById(id));
+        return "user-update";
     }
 
-    @RequestMapping("/{id}")
-    public String saveUser(@ModelAttribute("user") User user, BindingResult bindingResult, RedirectAttributes attributes){
-        if(bindingResult.hasErrors()){
-            return "new";
-        }
-        userService.createOrUpdateUser(user);
-        attributes.addFlashAttribute("flashMessage","User "+user.getFirstName()+ " successfully created!");
-        return "redirect:/users";
+    /**
+     * Обрабатывает запрос на обновление пользователя.
+     *
+     * @param user      Объект пользователя с обновленными данными.
+     * @param principal Аутентифицированный пользователь.
+     * @return Путь к представлению информации о пользователе (редирект).
+     */
+    @PostMapping("/user/user-update")
+    public String updateUsers(@ModelAttribute("user")User user,Principal principal){
+        userService.getUserForUpdateUsers(user,principal.getName());
+        userService.updateUser(user);
+        return "redirect:/user";
     }
 
-    @DeleteMapping("/delete")
-    public String deleteUser(@RequestParam(value = "id",required = true,defaultValue = "")int id, RedirectAttributes attributes){
-        User user=userService.deleteUser(id);
-
-        attributes.addFlashAttribute("flashMessage",(user==null)
-                ? "User are not exists!"
-                : "User "+user.getFirstName()+ " successfully deleted");
-        return "redirect:/users";
+    @GetMapping("/news")
+    public String showNews(){
+        return "/news";
     }
-
-
-
 }
